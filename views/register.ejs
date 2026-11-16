@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Регистрация — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<div class="topbar">Доставка по городу — в день заказа при наличии на складе &nbsp;•&nbsp; Оптовые цены для бригад</div>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/">Главная</a><a href="/catalog">Каталог</a><a href="/cart">Корзина</a><a href="/login">Войти</a></nav></header>
+<main class="auth-page">
+<div class="auth-card">
+<div class="auth-icon">📝</div>
+<h1 class="auth-title">Создать аккаунт</h1>
+<p class="auth-subtitle">Зарегистрируйтесь, чтобы оформлять заказы, платить фейковой картой и отслеживать статусы в «Моих заказах».</p>
+<% if (typeof error !== 'undefined' && error) { %><div class="auth-error"><%= error %></div><% } %>
+<form method="POST" action="/register" class="auth-form">
+<div><label class="form-label" for="name">Имя</label><input class="form-input" id="name" name="name" placeholder="Например, Иван" autocomplete="name" required></div>
+<div><label class="form-label" for="email">Email</label><input class="form-input" id="email" name="email" type="email" placeholder="you@example.ru" autocomplete="email" required></div>
+<div><label class="form-label" for="password">Пароль</label><input class="form-input" id="password" name="password" type="password" placeholder="Минимум 8 символов" minlength="8" autocomplete="new-password" required><div class="pw-meter"><div id="pw-bar"></div></div><p class="auth-hint" id="pw-text">Минимум 8 символов, строчные и заглавные буквы, цифра и спецсимвол.</p><ul class="pw-checks" id="pw-checks"><li data-check="length">Минимум 8 символов</li><li data-check="lower">Строчная буква</li><li data-check="upper">Заглавная буква</li><li data-check="digit">Цифра</li><li data-check="special">Спецсимвол (! @ # …)</li></ul></div>
+<button class="btn auth-btn" type="submit">Зарегистрироваться →</button>
+</form>
+<p class="auth-switch">Уже есть аккаунт? <a href="/login">Войти</a></p>
+</div>
+</main>
+<footer><b>СтройМаркет</b> © 2026 — стройматериалы с учётом склада<br>Главная • Каталог • Корзина • Вход / Регистрация</footer>
+<script src="/js/password.js"></script>
+</body></html>

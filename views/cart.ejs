@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Корзина — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<div class="topbar">Доставка по городу — в день заказа при наличии на складе &nbsp;•&nbsp; Оптовые цены для бригад</div>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/">Главная</a><a href="/catalog">Каталог</a><% if (user) { %><a href="/profile">Профиль</a><a href="/orders">Мои заказы</a><a href="/logout">Выйти (<%= user.name %>)</a><% } else { %><a href="/login">Войти</a><a href="/register">Регистрация</a><% } %></nav></header>
+<main class="container">
+<h1 style="font-size:32px;margin:8px 0 6px">Корзина</h1>
+<p style="color:var(--muted);margin:0 0 20px"><%= items.length ? 'Товаров в корзине: ' + items.reduce((s, i) => s + i.quantity, 0) + ' шт. Количество можно изменить — остаток на складе проверяется автоматически.' : 'Здесь появятся товары, которые вы добавите из каталога.' %></p>
+<% if (typeof error !== 'undefined' && error) { %><div class="auth-error" style="text-align:left;margin:0 0 18px"><%= error %></div><% } %>
+<% if (!items.length) { %>
+<div class="card empty-state"><div class="big">🛒</div><h2>Корзина пуста</h2><p style="color:var(--muted)">Загляните в каталог — там цемент, кирпич, пиломатериалы и инструменты с реальными остатками.</p><a class="btn" href="/catalog">Перейти в каталог →</a></div>
+<% } else { %>
+<div class="cart-layout">
+<section class="cart-items">
+<% items.forEach(i => { %>
+<article class="card cart-item">
+<div class="cart-thumb"><% if (i.image_url) { %><img src="<%= i.image_url %>" alt="<%= i.name %>"><% } else { %>🏗️<% } %></div>
+<div class="cart-info"><span style="font-size:13px;color:#777"><%= i.category_name || '' %></span><h3><a href="/product/<%= i.id %>"><%= i.name %></a></h3><div style="color:var(--muted);font-size:14px"><%= Number(i.price).toFixed(2) %> ₽ за шт. • На складе: <%= i.stock %></div>
+<form class="qty-form" method="POST" action="/cart/update"><input type="hidden" name="product_id" value="<%= i.id %>"><label for="qty-<%= i.id %>">Кол-во:</label><input class="qty-input" id="qty-<%= i.id %>" type="number" name="quantity" value="<%= i.quantity %>" min="1" max="<%= i.stock %>"><button class="btn btn-small" type="submit">Обновить</button></form>
+<% if (i.quantity >= i.stock) { %><div style="font-size:13px;color:var(--burgundy);margin-top:6px">Это максимум — больше на складе нет.</div><% } %>
+<form method="POST" action="/cart/remove"><input type="hidden" name="product_id" value="<%= i.id %>"><button class="btn-ghost" type="submit">✕ Удалить из корзины</button></form>
+</div>
+<div class="cart-line-total"><%= (Number(i.price) * i.quantity).toFixed(2) %> ₽<small><%= i.quantity %> × <%= Number(i.price).toFixed(2) %> ₽</small></div>
+</article>
+<% }) %>
+<form method="POST" action="/cart/clear" onsubmit="return confirm('Очистить всю корзину?')"><button class="btn-ghost" type="submit">Очистить корзину полностью</button></form>
+</section>
+<aside class="card summary-card">
+<h3 style="margin-top:0;font-size:22px">Итого</h3>
+<div class="summary-row"><span>Товары (<%= items.reduce((s, i) => s + i.quantity, 0) %> шт.)</span><b><%= total.toFixed(2) %> ₽</b></div>
+<div class="summary-row"><span>Доставка</span><b style="color:#1a7a2e">Бесплатно</b></div>
+<div class="summary-row total"><span>К оплате</span><span class="price" style="font-size:22px"><%= total.toFixed(2) %> ₽</span></div>
+<% if (user) { %><a class="btn summary-btn" href="/payment">Перейти к оплате →</a><p style="font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0">Далее — фейковая оплата картой.<br>Реальные деньги не спишутся.</p><% } else { %><a class="btn summary-btn" href="/login">Войти для оплаты</a><p style="font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0">Оплата доступна после входа.<br>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a></p><% } %>
+<a href="/catalog" style="display:block;text-align:center;margin-top:14px">← Продолжить покупки</a>
+</aside>
+</div>
+<% } %>
+</main>
+<footer><b>СтройМаркет</b> © 2026 — стройматериалы с учётом склада<br>Главная • Каталог • Корзина • Вход / Регистрация</footer>
+</body></html>

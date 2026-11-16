@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Оплата — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<div class="topbar">Доставка по городу — в день заказа при наличии на складе &nbsp;•&nbsp; Оптовые цены для бригад</div>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/catalog">Каталог</a><a href="/cart">Корзина</a><a href="/profile">Профиль</a><a href="/orders">Мои заказы</a></nav></header>
+<main class="container">
+<h1 style="font-size:32px;margin:8px 0 6px">Оплата заказа</h1>
+<p style="color:var(--muted);margin:0 0 18px">Проверьте состав заказа и введите данные своей карты.</p>
+
+<% if (typeof error !== 'undefined' && error) { %><div class="auth-error" style="text-align:left;margin:0 0 18px"><%= error %></div><% } %>
+<div class="payment-layout">
+<form class="card pay-form" id="payment-form" method="POST" action="/payment">
+<h2 style="margin:0">Данные карты</h2>
+<div class="test-card">Принимаем Visa, Mastercard и Мир. Введите номер вашей карты, срок действия и CVC.</div>
+<div><label class="form-label" for="card_name">Имя владельца</label><input class="form-input" id="card_name" name="card_name" placeholder="IVAN IVANOV" value="<%= form.card_name || '' %>" autocomplete="cc-name" required></div>
+<div><label class="form-label" for="card_number">Номер карты <span class="card-brand" id="card-brand"></span></label><input class="form-input" id="card_number" name="card_number" placeholder="0000 0000 0000 0000" inputmode="numeric" autocomplete="cc-number" maxlength="23" required></div>
+<div class="pay-row">
+<div><label class="form-label" for="expiry">Срок действия</label><input class="form-input" id="expiry" name="expiry" placeholder="ММ/ГГ" value="<%= form.expiry || '' %>" inputmode="numeric" autocomplete="cc-exp" required></div>
+<div><label class="form-label" for="cvc">CVC</label><input class="form-input" id="cvc" name="cvc" placeholder="123" inputmode="numeric" autocomplete="cc-csc" required></div>
+</div>
+<button class="btn auth-btn" id="pay-btn" type="submit">Оплатить <%= total.toFixed(2) %> ₽</button>
+<p style="font-size:13px;color:var(--muted);margin:0;text-align:center">Нажимая «Оплатить», вы имитируете платёж: заказ создастся, а остаток спишется со склада.</p>
+</form>
+<aside class="card summary-card">
+<h3 style="margin-top:0;font-size:22px">Ваш заказ</h3>
+<% items.forEach(i => { %><div class="summary-row"><span><%= i.name %> × <%= i.quantity %></span><b><%= (Number(i.price) * i.quantity).toFixed(2) %> ₽</b></div><% }) %>
+<div class="summary-row"><span>Доставка</span><b style="color:#1a7a2e">Бесплатно</b></div>
+<div class="summary-row total"><span>К оплате</span><span class="price" style="font-size:22px"><%= total.toFixed(2) %> ₽</span></div>
+<a href="/cart" style="display:block;text-align:center;margin-top:14px">← Вернуться в корзину</a>
+</aside>
+</div>
+</main>
+<footer><b>СтройМаркет</b> © 2026 — стройматериалы с учётом склада</footer>
+<script src="/js/payment.js"></script>
+</body></html>

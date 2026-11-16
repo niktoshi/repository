@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Заказ оформлен — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/catalog">Каталог</a><a href="/orders">Мои заказы</a><a href="/cart">Корзина</a></nav></header>
+<main class="container">
+<div class="card empty-state">
+<div class="big">✅</div>
+<h1 style="margin:10px 0 8px">Заказ оформлен и оплачен!</h1>
+<p>Номер заказа: <b>#<%= orderId %></b></p>
+<p>Итого: <b class="price" style="font-size:22px"><%= Number(total).toFixed(2) %> ₽</b></p>
+<% if (typeof payment !== 'undefined' && payment) { %><p><span class="status-badge pay-badge"><%= payment.status %> • <%= payment.method %> •• <%= payment.last4 %></span></p><% } %>
+<p style="color:var(--muted)">Остаток будет списан со склада, когда администратор переведёт заказ в статус «Выполнен». Статус заказа можно отслеживать в разделе «Мои заказы».</p>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px"><a class="btn" href="/orders">Мои заказы</a><a class="btn btn-dark" href="/catalog">Продолжить покупки</a></div>
+</div>
+</main>
+<footer><b>СтройМаркет</b> © 2026</footer>
+</body></html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Профиль — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<div class="topbar">Доставка по городу — в день заказа при наличии на складе &nbsp;•&nbsp; Оптовые цены для бригад</div>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/">Главная</a><a href="/catalog">Каталог</a><a href="/cart">Корзина</a><a href="/orders">Мои заказы</a><a href="/logout">Выйти</a></nav></header>
+<main class="container">
+<h1 style="font-size:32px;margin:8px 0 6px">Профиль</h1>
+<p style="color:var(--muted);margin:0 0 20px">Здесь можно посмотреть данные аккаунта, изменить имя и email, а также сменить пароль.</p>
+<% if (typeof error !== 'undefined' && error) { %><div class="auth-error" style="text-align:left;margin:0 0 18px"><%= error %></div><% } %>
+<% if (typeof success !== 'undefined' && success) { %><div style="background:#eaf7ee;border:1px solid #bfe6c9;color:#1a7a2e;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:600;margin:0 0 18px"><%= success %></div><% } %>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+<div class="card">
+<h2 style="margin-top:0">Личные данные</h2>
+<p style="color:var(--muted);font-size:15px">Роль: <b><%= profile.role === 'admin' ? 'Администратор' : 'Покупатель' %></b><br>Заказов: <b><%= ordersCount %></b><br>С нами с: <b><%= new Date(profile.created_at).toLocaleDateString('ru-RU') %></b></p>
+<form method="POST" action="/profile" style="display:flex;flex-direction:column;gap:16px">
+<div><label class="form-label" for="name">Имя</label><input class="form-input" id="name" name="name" value="<%= profile.name %>" required></div>
+<div><label class="form-label" for="email">Email</label><input class="form-input" id="email" name="email" type="email" value="<%= profile.email %>" required></div>
+<button class="btn" type="submit">Сохранить изменения</button>
+</form>
+</div>
+<div class="card">
+<h2 style="margin-top:0">Смена пароля</h2>
+<form method="POST" action="/profile/password" style="display:flex;flex-direction:column;gap:16px">
+<div><label class="form-label" for="current_password">Текущий пароль</label><input class="form-input" id="current_password" name="current_password" type="password" autocomplete="current-password" required></div>
+<div><label class="form-label" for="password">Новый пароль</label><input class="form-input" id="password" name="new_password" type="password" placeholder="Минимум 8 символов" minlength="8" autocomplete="new-password" required><div class="pw-meter"><div id="pw-bar"></div></div><p class="auth-hint" id="pw-text">Минимум 8 символов, строчные и заглавные буквы, цифра и спецсимвол.</p><ul class="pw-checks" id="pw-checks"><li data-check="length">Минимум 8 символов</li><li data-check="lower">Строчная буква</li><li data-check="upper">Заглавная буква</li><li data-check="digit">Цифра</li><li data-check="special">Спецсимвол (! @ # …)</li></ul></div>
+<div><label class="form-label" for="confirm_password">Подтверждение нового пароля</label><input class="form-input" id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required></div>
+<button class="btn" type="submit">Изменить пароль</button>
+</form>
+</div>
+</div>
+<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><a class="btn" href="/orders">Мои заказы →</a><a class="btn btn-dark" href="/catalog">Перейти в каталог</a><a href="/logout">Выйти из аккаунта</a></div>
+</main>
+<footer><b>СтройМаркет</b> © 2026 — стройматериалы с учётом склада</footer>
+<script src="/js/password.js"></script>
+</body></html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title><%= product.name %> — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<header><a href="/" style="font-weight:bold">СтройМаркет</a><nav><a href="/catalog">Каталог</a><a href="/cart">Корзина</a><% if (user) { %><a href="/profile">Профиль</a><a href="/orders">Мои заказы</a><a href="/logout">Выйти</a><% } else { %><a href="/login">Войти</a><% } %></nav></header>
+<main class="container">
+<a href="/catalog">← Назад в каталог</a>
+<div class="product-layout" style="margin-top:16px">
+<div class="product-gallery"><% if (product.image_url) { %><img src="<%= product.image_url %>" alt="<%= product.name %>"><% } else { %><div class="product-image-large">🏗️<div style="font-size:16px;margin-top:12px">Фото товара скоро появится</div></div><% } %></div>
+<div class="card">
+<p style="margin:0;color:#777;font-size:14px"><%= product.category_name || 'Без категории' %></p>
+<h1 style="margin:8px 0"><%= product.name %></h1>
+<p><%= product.description || 'Описание пока не добавлено.' %></p>
+<p class="price" style="font-size:24px"><%= product.price %> ₽</p>
+<p><% if (product.stock > 5) { %><span class="stock-ok">● В наличии: <b><%= product.stock %></b></span><% } else if (product.stock > 0) { %><span class="stock-low">● Осталось мало: <b><%= product.stock %></b></span><% } else { %><span class="stock-out">● Нет в наличии</span><% } %></p>
+<% if (product.stock > 0) { %>
+<form method="POST" action="/cart/add"><input type="hidden" name="product_id" value="<%= product.id %>"><label>Количество: <input type="number" name="quantity" value="1" min="1" max="<%= product.stock %>" style="width:70px;padding:8px"></label> <button class="btn" type="submit">В корзину</button></form>
+<% } else { %><p style="color:var(--burgundy)">Товар временно отсутствует на складе.</p><% } %>
+<p style="font-size:14px;color:#555">Доставка по городу — в день заказа при наличии на складе. Возврат в заводской упаковке — 14 дней.</p>
+</div>
+</div>
+</main>
+<footer>СтройМаркет © 2026</footer>
+</body></html>

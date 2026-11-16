@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Мои заказы — СтройМаркет</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<div class="topbar">Доставка по городу — в день заказа при наличии на складе &nbsp;•&nbsp; Оптовые цены для бригад</div>
+<header><a class="logo" href="/">Строй<span>Маркет</span></a><nav><a href="/">Главная</a><a href="/catalog">Каталог</a><a href="/cart">Корзина</a><a href="/profile">Профиль</a><a href="/logout">Выйти (<%= user.name %>)</a></nav></header>
+<main class="container">
+<h1 style="font-size:32px;margin:8px 0 6px">Мои заказы</h1>
+<p style="color:var(--muted);margin:0 0 20px">История ваших заказов, их состав и текущий статус. Статус меняет администратор в админ-панели.</p>
+<% const labels = { new: 'Новый', processing: 'В обработке', completed: 'Выполнен', cancelled: 'Отменён' }; %>
+<% if (!orders.length) { %>
+<div class="card empty-state"><div class="big">📦</div><h2>Заказов пока нет</h2><p style="color:var(--muted)">Когда вы оформите и оплатите первый заказ, он появится здесь вместе со статусом.</p><a class="btn" href="/catalog">Перейти в каталог →</a></div>
+<% } else { %>
+<div class="orders-list">
+<% orders.forEach(o => { %>
+<article class="card">
+<div class="order-head"><div><h3>Заказ #<%= o.id %></h3><div class="order-date"><%= new Date(o.created_at).toLocaleString('ru-RU') %></div></div><div class="badges"><span class="status-badge status-<%= o.status %>"><%= labels[o.status] || o.status %></span><% if (o.payment_status === 'paid') { %><span class="status-badge pay-badge">Оплачено<%= o.card_last4 ? ' •• ' + o.card_last4 : '' %></span><% } else { %><span class="status-badge">Не оплачено</span><% } %></div></div>
+<ul class="order-items"><% o.items.forEach(i => { %><li><span><%= i.product_name || ('Товар #' + i.product_id) %> × <%= i.quantity %></span><b><%= (Number(i.price) * i.quantity).toFixed(2) %> ₽</b></li><% }) %></ul>
+<div class="order-foot"><span>Статус: <b><%= labels[o.status] || o.status %></b></span><span>Итого: <b class="price" style="font-size:20px"><%= Number(o.total).toFixed(2) %> ₽</b></span></div>
+</article>
+<% }) %>
+</div>
+<% } %>
+</main>
+<footer><b>СтройМаркет</b> © 2026 — стройматериалы с учётом склада</footer>
+</body></html>
